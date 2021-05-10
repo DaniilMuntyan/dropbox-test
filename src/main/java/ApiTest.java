@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ApiTest {
-    private static final String TOKEN = "sl.AwniuCpYPnK8oEAJLWGMw4laiU3ySC1-f3UoCMnZBqF7i_Xof8LZ5YAA7GFGZ14WVexhTPCcw9IrrpNy7dRCJoaIAsXlZRQKsGgZt6QCdsadVvoawMHXHM5CW44dwQfaJYV_Lsq1tJ6H";
+    private static final String TOKEN = "fT6zIWx0X1wAAAAAAAAAAfa2hQr47rNsKNEOLn9HBLJuNjy45h8Ynxj_V85PCqrz";
     private static final String PATH_LOCAL = "./file.txt";
     private static final String PATH_CLOUD = "/file.txt";
 
