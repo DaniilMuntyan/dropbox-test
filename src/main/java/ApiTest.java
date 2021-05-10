@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ApiTest {
-    private static final String TOKEN = "sl.AwlOwin1kTPnMo6Bbd854RZMzI9YlICuTiRAr4CprS_fV0DMRy_Yaw_pKIfb1xw1WeDz-ENAxWfOl-D7CiLtilUq6nfa7P21ENLRMZOYH3qwq_QkPKCyx3IdQ7Qznj1wABT_jGkx7LnZ";
+    private static final String TOKEN = "sl.AwniuCpYPnK8oEAJLWGMw4laiU3ySC1-f3UoCMnZBqF7i_Xof8LZ5YAA7GFGZ14WVexhTPCcw9IrrpNy7dRCJoaIAsXlZRQKsGgZt6QCdsadVvoawMHXHM5CW44dwQfaJYV_Lsq1tJ6H";
     private static final String PATH_LOCAL = "./file.txt";
     private static final String PATH_CLOUD = "/file.txt";
 
@@ -38,12 +38,13 @@ public class ApiTest {
 
     @Test
     @Order(2)
-    public void getFile() {
+    public void getFile() throws IOException {
+        upload();
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", PATH_CLOUD);
-        requestBody.put("include_has_explicit_shared_members", false);
         requestBody.put("include_media_info", false);
         requestBody.put("include_deleted", false);
+        requestBody.put("include_has_explicit_shared_members", false);
         Response responseWithId = RestAssured
                 .given()
                 .config(RestAssured
@@ -65,12 +66,13 @@ public class ApiTest {
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer " + TOKEN).
                 header("Content-Type", "application/json").
-                body(requestBody.toJSONString()).
+                body(requestBody2.toJSONString()).
                 when().
                 post("https://api.dropboxapi.com/2/sharing/get_file_metadata");
         System.out.println(requestBody.toJSONString());
         System.out.println(response.body().print());
         assertEquals(200, response.getStatusCode());
+        deleteFile();
     }
 
     @Test
