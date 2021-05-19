@@ -61,17 +61,16 @@ public class ApiTest {
         JSONObject requestBody2 = new JSONObject();
         requestBody2.put("file", fileId);
         requestBody2.put("actions", new ArrayList());
-        Response response = RestAssured.given().
+        RestAssured.given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer " + TOKEN).
                 header("Content-Type", "application/json").
                 body(requestBody2.toJSONString()).
                 when().
-                post("https://api.dropboxapi.com/2/sharing/get_file_metadata");
+                post("https://api.dropboxapi.com/2/sharing/get_file_metadata").
+                then().statusCode(200);
         System.out.println(requestBody.toJSONString());
-        System.out.println(response.body().print());
-        assertEquals(200, response.getStatusCode());
         deleteFile();
     }
 
@@ -80,13 +79,13 @@ public class ApiTest {
     public void deleteFile() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", PATH_CLOUD);
-        Response response = given().
+        given().
                 config(RestAssured.config()
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
                 .header("Authorization", "Bearer " + TOKEN)
                 .header("Content-Type", "application/json")
                 .body(requestBody.toJSONString()).when()
-                .post("https://api.dropboxapi.com/2/files/delete_v2");
-        Assertions.assertEquals(200, response.getStatusCode());
+                .post("https://api.dropboxapi.com/2/files/delete_v2").
+                        then().statusCode(200);
     }
 }
