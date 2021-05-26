@@ -1,11 +1,7 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.json.simple.JSONObject;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +10,6 @@ import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static org.junit.Assert.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ApiTest {
@@ -39,7 +34,6 @@ public class ApiTest {
     @Test
     @Order(2)
     public void getFile() throws IOException {
-        upload();
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", PATH_CLOUD);
         requestBody.put("include_media_info", false);
@@ -55,9 +49,9 @@ public class ApiTest {
                 .body(requestBody.toJSONString())
                 .when()
                 .post("https://api.dropboxapi.com/2/files/get_metadata");
-        System.out.println(responseWithId.asString());
+        System.out.println("1. " + responseWithId.asString());
         String fileId = responseWithId.jsonPath().get("id");
-        System.out.println(fileId);
+        System.out.println("2. " + fileId);
         JSONObject requestBody2 = new JSONObject();
         requestBody2.put("file", fileId);
         requestBody2.put("actions", new ArrayList());
@@ -70,8 +64,7 @@ public class ApiTest {
                 when().
                 post("https://api.dropboxapi.com/2/sharing/get_file_metadata").
                 then().statusCode(200);
-        System.out.println(requestBody.toJSONString());
-        deleteFile();
+        System.out.println("3. " + requestBody.toJSONString());
     }
 
     @Test
@@ -79,6 +72,7 @@ public class ApiTest {
     public void deleteFile() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", PATH_CLOUD);
+        System.out.println("!!! " + requestBody.toJSONString());
         given().
                 config(RestAssured.config()
                         .encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
